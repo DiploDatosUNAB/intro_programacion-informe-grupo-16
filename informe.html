@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="nombres" />
+<meta name="author" content="lucia" />
 
 
-<title>titulo</title>
+<title>usodeltiempo</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -362,23 +362,162 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">titulo</h1>
-<h4 class="author">nombres</h4>
+<h1 class="title toc-ignore">usodeltiempo</h1>
+<h4 class="author">lucia</h4>
 
 </div>
 
 
 <div id="introducción" class="section level2">
 <h2>Introducción</h2>
+<p>Para este trabajo se eligió utilizar los datos referidos a “Uso del
+Tiempo”. Para ello se accedió a la base de datos que se encuentra en
+apartado “Dataset” que brinda la Dirección General de Estadística y
+Censos del Ministerio de Economía y Finanzas del Gobierno de la
+Ciudad.</p>
+<p>En esta oportunidad los datos a analizar muestran la información
+sobre el tiempo que se destina a la realización de distintas actividades
+de la población de la Ciudad de Buenos Aires. Se le realizó a un amplio
+número de mujeres y varones que abarcan desde los 14 años a los 97 años.
+Se tomaron en cuenta tres encuestas, las cuales se realizaron unas en el
+año 2005 y otras en el 2016: - Uso del tiempo - Participación en
+diversas actividades año 2016 - Participación en diversas actividades
+año 2005</p>
 </div>
 <div id="exploración-de-los-datos" class="section level2">
 <h2>Exploración de los datos</h2>
-<pre class="r"><code># Código para cargar o leer los datos</code></pre>
-<pre class="r"><code># Cödigo de R acá 
-# Agregá más bloques según sea necesario</code></pre>
+<p>Al comenzar a explorar los datos se puede observar que la encuesta
+“Uso del Tiempo” se confeccionó a partir de 27 variables entre las
+cuales se pueden observar las variables que caracterizan la composición
+de la población, tales como género, edad, estado ocupacional, etc.
+Asimismo aparecen variables que resultan de importancia a hora de
+analizar y pensar qué entendemos por uso del tiempo, en este sentido se
+observan las siguientes variables “trabajo doméstico no pago” ,
+“recreación” “tareas de cuidado”, “aplicaciones”.</p>
+<pre class="r"><code># Código para cargar o leer los datos
+library(readr)
+encuesta_uso_tiempo_2016 &lt;- read_csv(&quot;datos/encuesta_uso_tiempo_2016.csv&quot;)</code></pre>
+<pre><code>## Rows: 2336 Columns: 27
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (10): hogar, sexo, dia_laborable, dia_tipico, rango_etario, nivel_educat...
+## dbl (17): edad, trabajo_pago, trabajo_domestico_no_pago, voluntariados, estu...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>library(readr)
+part_activ_2005 &lt;- read_csv(&quot;datos/part_activ_2005.csv&quot;)</code></pre>
+<pre><code>## Rows: 24 Columns: 4
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (2): sexo, grupos_actividad
+## dbl (2): anio, porc_poblacion
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>library(readr)
+part_activ_2016 &lt;- read_csv(&quot;datos/part_activ_2016.csv&quot;)</code></pre>
+<pre><code>## Rows: 24 Columns: 4
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (2): sexo, grupos_actividad
+## dbl (2): anio, porc_poblacion
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code># Uso del tiempo de las mujeres
+filter(encuesta_uso_tiempo_2016,sexo == &quot;Mujer&quot;)</code></pre>
+<pre><code>## # A tibble: 1,345 × 27
+##    hogar sexo   edad dia_labor…¹ traba…² traba…³ volun…⁴ estud…⁵ recre…⁶ aplic…⁷
+##    &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 6_1   Mujer    14 &quot;D\xeda no…       0     3         0     0       4.2     4.8
+##  2 7_1   Mujer    14 &quot;D\xeda no…       0     0.3       0     6.7     2.2     4.7
+##  3 8_1   Mujer    14 &quot;D\xeda no…       0     0.3       0     8.8     4.9     1.5
+##  4 9_1   Mujer    14 &quot;D\xeda no…       0     0.3       0    10.7     1.8     2.5
+##  5 10_1  Mujer    14 &quot;D\xeda no…       0     1.1       0     6       1.1     1  
+##  6 11_1  Mujer    14 &quot;D\xeda no…       0     0         0     6.7     3       2.5
+##  7 12_1  Mujer    14 &quot;D\xeda no…       0     0         0     5       3       3  
+##  8 13_1  Mujer    14 &quot;D\xeda no…       0     0         0    10.5     0.5     3.8
+##  9 13_2  Mujer    36 &quot;D\xeda no…       0    12.5       0     0       0       2  
+## 10 18_1  Mujer    15 &quot;D\xeda no…       0     0.3       0     6.2     1       5  
+## # … with 1,335 more rows, 17 more variables: tareas_cuidados &lt;dbl&gt;,
+## #   cuidado_personal &lt;dbl&gt;, trabajo_pago2 &lt;dbl&gt;,
+## #   trabajo_domestico_no_pago2 &lt;dbl&gt;, voluntariados2 &lt;dbl&gt;,
+## #   estudio_educacion2 &lt;dbl&gt;, recreacion2 &lt;dbl&gt;, aplicaciones2 &lt;dbl&gt;,
+## #   tareas_cuidados2 &lt;dbl&gt;, cuidado_personal2 &lt;dbl&gt;, dia_tipico &lt;chr&gt;,
+## #   rango_etario &lt;chr&gt;, nivel_educativo &lt;chr&gt;, relacion_parentesco_jefe &lt;chr&gt;,
+## #   tipo_hogar &lt;chr&gt;, quintil_ingreso &lt;chr&gt;, estado_ocupacional &lt;chr&gt;, and …
+## # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names</code></pre>
+<pre class="r"><code>mutate(part_activ_2016, porc_poblacion = round(porc_poblacion, digits = 2))</code></pre>
+<pre><code>## # A tibble: 24 × 4
+##     anio sexo  porc_poblacion grupos_actividad                                  
+##    &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;                                             
+##  1  2016 TOTAL           49.1 Trabajo para el mercado                           
+##  2  2016 TOTAL           86.8 Trabajo doméstico no remunerado                   
+##  3  2016 TOTAL            8.4 Servicios a la comunidad y ayudas no pagas        
+##  4  2016 TOTAL           16.6 Educación                                         
+##  5  2016 TOTAL           88.3 Convivencia social y actividades recreativas      
+##  6  2016 TOTAL           76.2 Uso de medios de comunicación                     
+##  7  2016 TOTAL           26.5 Trabajo de cuidado no remunerado a miembros del h…
+##  8  2016 TOTAL          100   Cuidado personal                                  
+##  9  2016 m               42.8 Trabajo para el mercado                           
+## 10  2016 m               90.8 Trabajo doméstico no remunerado                   
+## # … with 14 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
+<pre class="r"><code>filter(part_activ_2016,sexo == &quot;m&quot; )</code></pre>
+<pre><code>## # A tibble: 8 × 4
+##    anio sexo  porc_poblacion grupos_actividad                                   
+##   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;                                              
+## 1  2016 m               42.8 Trabajo para el mercado                            
+## 2  2016 m               90.8 Trabajo doméstico no remunerado                    
+## 3  2016 m               10.1 Servicios a la comunidad y ayudas no pagas         
+## 4  2016 m               17.1 Educación                                          
+## 5  2016 m               86.8 Convivencia social y actividades recreativas       
+## 6  2016 m               75.3 Uso de medios de comunicación                      
+## 7  2016 m               30.8 Trabajo de cuidado no remunerado a miembros del ho…
+## 8  2016 m              100   Cuidado personal</code></pre>
+<pre class="r"><code>filter(part_activ_2005,sexo == &quot;m&quot; )</code></pre>
+<pre><code>## # A tibble: 8 × 4
+##    anio sexo  porc_poblacion grupos_actividad                                   
+##   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;                                              
+## 1  2005 m               35.7 Trabajo para el mercado                            
+## 2  2005 m               92.6 Trabajo doméstico no remunerado                    
+## 3  2005 m               10.9 Servicios a la comunidad y ayudas no pagas         
+## 4  2005 m               14.1 Educación                                          
+## 5  2005 m               91.4 Convivencia social y actividades recreativas       
+## 6  2005 m               90   Uso de medios de comunicación                      
+## 7  2005 m               30.9 Trabajo de cuidado no remunerado a miembros del ho…
+## 8  2005 m              100   Cuidado personal</code></pre>
+<p>El promedio del trabajo domestico no pago del año 2016</p>
+<pre class="r"><code>summarise(encuesta_uso_tiempo_2016, trabajo_domestico_no_pago_pro = mean(trabajo_domestico_no_pago))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   trabajo_domestico_no_pago_pro
+##                           &lt;dbl&gt;
+## 1                          2.57</code></pre>
+<p>El desvio estándar de dicho trabajo doméstico no pago del año
+2016</p>
+<pre class="r"><code>summarise(encuesta_uso_tiempo_2016, trabajo_domestico_no_pago_pro = mean(trabajo_domestico_no_pago), trabajo_domestico_no_pago_sd = sd(trabajo_domestico_no_pago))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   trabajo_domestico_no_pago_pro trabajo_domestico_no_pago_sd
+##                           &lt;dbl&gt;                        &lt;dbl&gt;
+## 1                          2.57                         2.48</code></pre>
+<pre class="r"><code>summarise(encuesta_uso_tiempo_2016, estudio_educacion = mean(estudio_educacion))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   estudio_educacion
+##               &lt;dbl&gt;
+## 1             0.734</code></pre>
 </div>
 <div id="hipótesis" class="section level2">
 <h2>Hipótesis</h2>
+<ul>
+<li><p>En qué medida el trabajo no remunerado, las tareas de cuidado y
+el trabajo doméstico determina el uso del tiempo dedicado a los estudios
+de las personas.</p></li>
+<li><p>Las mujeres le dedican mayor cantidad de su tiempo a las tareas
+de cuidado.</p></li>
+<li><p>El consumo de medios de comunicación por parte de la población
+que habita en la ciudad se redujo 13%.</p></li>
+</ul>
 </div>
 
 
