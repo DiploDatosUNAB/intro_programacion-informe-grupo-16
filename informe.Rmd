@@ -1,6 +1,6 @@
 ---
-title: "titulo"
-author: "nombres"
+title: "usodeltiempo"
+author: "lucia"
 output: html_document
 ---
 
@@ -8,29 +8,75 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # Cargar los paquetes necesarios acá
+library(tidyr)
+library(dplyr)
+library(datos)
+library(readr)
 ```
 
 
 ## Introducción
 
+Para este trabajo se eligió utilizar los datos referidos a “Uso del Tiempo”. Para ello se accedió a la base de datos que se encuentra en apartado “Dataset” que brinda la Dirección General de Estadística y Censos del Ministerio de Economía y Finanzas del Gobierno de la Ciudad.
+
+En esta oportunidad los datos a analizar muestran la información sobre el tiempo que se destina a la realización de distintas actividades de la población de la Ciudad de Buenos Aires. Se le realizó a un amplio número de mujeres y varones que abarcan desde los 14 años a los 97 años.
+Se tomaron en cuenta tres encuestas, las cuales se realizaron unas en el año 2005 y otras en el 2016: 
+- Uso del tiempo
+- Participación en diversas actividades año 2016
+- Participación en diversas actividades año 2005
 
 
 ## Exploración de los datos
 
+Al comenzar a explorar los datos se puede observar que la encuesta “Uso del Tiempo” se confeccionó a partir de 27 variables entre las cuales se pueden observar las variables que caracterizan la composición de la población, tales como género, edad, estado ocupacional, etc. Asimismo aparecen variables que resultan de importancia a hora de analizar y pensar qué entendemos por uso del tiempo, en este sentido se observan las siguientes variables “trabajo doméstico no pago” , “recreación” “tareas de cuidado”, “aplicaciones”.
 
 ```{r}
 # Código para cargar o leer los datos
+library(readr)
+encuesta_uso_tiempo_2016 <- read_csv("datos/encuesta_uso_tiempo_2016.csv")
+library(readr)
+part_activ_2005 <- read_csv("datos/part_activ_2005.csv")
+library(readr)
+part_activ_2016 <- read_csv("datos/part_activ_2016.csv")
 ```
 
+```{r}
+# Uso del tiempo de las mujeres
+filter(encuesta_uso_tiempo_2016,sexo == "Mujer")
+```
+
+```{r}
+mutate(part_activ_2016, porc_poblacion = round(porc_poblacion, digits = 2))
+```
+```{r}
+filter(part_activ_2016,sexo == "m" )
+```
 
 
 ```{r}
-# Cödigo de R acá 
-# Agregá más bloques según sea necesario
+filter(part_activ_2005,sexo == "m" )
 ```
 
+El promedio del trabajo domestico no pago del año 2016
+
+```{r}
+summarise(encuesta_uso_tiempo_2016, trabajo_domestico_no_pago_pro = mean(trabajo_domestico_no_pago))
+```
+El desvio estándar de dicho trabajo doméstico no pago del año 2016
+
+```{r}
+summarise(encuesta_uso_tiempo_2016, trabajo_domestico_no_pago_pro = mean(trabajo_domestico_no_pago), trabajo_domestico_no_pago_sd = sd(trabajo_domestico_no_pago))
+```
+```{r}
+summarise(encuesta_uso_tiempo_2016, estudio_educacion = mean(estudio_educacion))
+```
 
 
 ## Hipótesis
 
+- En qué medida el trabajo no remunerado, las tareas de cuidado y el trabajo doméstico determina el uso del tiempo dedicado a los estudios de las personas.
+
+- Las mujeres le dedican mayor cantidad de su tiempo a las tareas de cuidado.
+
+- El consumo de medios de comunicación por parte de la población que habita en la ciudad se redujo 13%.
 
